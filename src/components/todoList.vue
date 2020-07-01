@@ -5,8 +5,7 @@
         <li v-for="todo in todos" class="item">
           <todo-list-item
             :todo="todo"
-            @removeTodo="removeTodo"
-            @checkTodo="checkTodo"
+            @checkTodo="checkTodoAsCompleted"
           ></todo-list-item>
         </li>
       </ul>
@@ -16,9 +15,7 @@
       <div class="footer-content">
         <div class="counter">{{todos.length}} item/s left</div>
         <div class="filter">
-          <todo-list-filter
-            @filterTodos="filterTodos"
-          ></todo-list-filter>
+          <todo-list-filter></todo-list-filter>
         </div>
         <button
           class="remove-all"
@@ -32,6 +29,7 @@
 <script>
   import todoListFilter from "./todoListFilter.vue";
   import todoListItem from "./todoListItem.vue";
+  import { mapMutations } from 'vuex';
 
   export default {
     components: {
@@ -42,11 +40,9 @@
       todos: Array,
     },
     methods: {
-      removeTodo(id) {
-        this.$emit('removeTodo', id);
-      },
-      checkTodo(todoItem) {
-        this.$emit('checkTodo', todoItem);
+      ...mapMutations(['checkTodo']),
+      checkTodoAsCompleted(todoItem) {
+        this.checkTodo(todoItem);
       },
       filterTodos(filter) {
         this.$emit('filterTodos', filter);

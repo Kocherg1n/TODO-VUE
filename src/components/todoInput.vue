@@ -10,12 +10,13 @@
       placeholder="todo name..."
       autofocus
       v-model="todo.name"
-      @keydown.enter="addTodo"
+      @keydown.enter="addNewTodo"
     >
   </div>
 </template>
 
 <script>
+  import { mapMutations } from 'vuex';
   let uniqId = 0;
   export default {
     data() {
@@ -28,11 +29,15 @@
       }
     },
     methods: {
-      addTodo() {
+      ...mapMutations(['addTodo']),
+      addNewTodo() {
         if (this.todo.name) {
+
           uniqId++;
           this.todo.id = uniqId;
-          this.$emit('addTodo', {...this.todo});
+
+          this.addTodo({...this.todo});
+
           this.todo.name = '';
         }
       },

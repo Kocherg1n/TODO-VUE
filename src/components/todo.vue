@@ -1,15 +1,11 @@
 <template>
     <div class="todo">
       <todo-input
-        @addTodo="addTodo"
         @checkedAll="checkedAll">
       </todo-input>
       <todo-list
         v-if="todos.length"
         :todos="filteredTodos"
-        @removeTodo="removeTodo"
-        @checkTodo="checkTodo"
-        @filterTodos="filterTodos"
         @removeCompleted="removeCompleted"
       ></todo-list>
     </div>
@@ -18,21 +14,23 @@
 <script>
   import todoList from "./todoList";
   import todoInput from "./todoInput";
+  import { mapState } from "vuex";
 
   let checked = false;
 
   export default {
     data() {
-      return {
-        todos: [],
-        filter: 'all',
-      };
+      return {};
     },
     components: {
       todoInput,
       todoList,
     },
     computed: {
+      ...mapState({
+        todos: state => state.todos.todos,
+        filter: state => state.todos.filter,
+      }),
       filteredTodos() {
         switch (this.filter) {
           case "all":
@@ -45,18 +43,6 @@
       }
     },
     methods: {
-      addTodo(todo) {
-        this.todos.push(todo)
-      },
-      removeTodo(id) {
-        this.todos = this.todos.filter(todo => todo.id !== id);
-      },
-      checkTodo(todoItem) {
-        this.todos = this.todos.map(todo => todo.id === todoItem.id ? todoItem : todo);
-      },
-      filterTodos(filter) {
-        this.filter = filter;
-      },
       checkedAll() {
         !checked ? checked = true : checked = false;
         this.todos.map(todo => todo.checked = checked);

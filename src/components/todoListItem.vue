@@ -17,19 +17,21 @@
     <button
       type="button"
       class="remove button"
-      @click="removeTodo"
+      @click="removeExistedTodo"
     >x</button>
   </div>
 </template>
 
 <script>
+  import { mapMutations } from 'vuex';
   export default {
     props: {
       todo: Object
     },
     methods: {
-      removeTodo() {
-        this.$emit('removeTodo', this.todo.id);
+      ...mapMutations(['removeTodo']),
+      removeExistedTodo() {
+        this.removeTodo(this.todo.id);
       },
       checkTodo(e) {
         const todoItem = {
